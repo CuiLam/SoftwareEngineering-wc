@@ -19,6 +19,11 @@ public class MainIndex {
                     System.out.println("行数：" + line);
                 break;
             case "-s":
+                int count = getFileStringCount(path);
+                if (count == 0)
+                    System.out.println("该文件是空文件");
+                else
+                    System.out.println("单词个数：" + count);
                 break;
         }
     }
