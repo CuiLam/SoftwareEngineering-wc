@@ -38,7 +38,7 @@ public class FileUtil {
         Pattern p = Pattern.compile(pattern);
         Matcher matcher = p.matcher(s);
         while (matcher.find()) {
-            System.out.println(matcher.group(0));
+//            System.out.println(matcher.group(0));
             count++;
         }
         return count;
@@ -57,6 +57,25 @@ public class FileUtil {
             String line;
             while ((line = bufferedReader.readLine()) != null)
                 count += getStringCount(line);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    /**
+     * 计算文件字符数
+     * @param path 文件路径
+     * @return 返回文件字符数
+     */
+    public static int getFileCharsCount(String path) {
+        int count = 0;
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path));
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null)
+                count += line.length();
         } catch (Exception e) {
             e.printStackTrace();
         }
