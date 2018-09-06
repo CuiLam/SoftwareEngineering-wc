@@ -1,8 +1,6 @@
 package com.lam;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import static com.lam.util.FileUtil.*;
 
 public class MainIndex {
 
@@ -12,17 +10,16 @@ public class MainIndex {
     public static void main(String[] args) {
         String param = args[ARGS_PARAM];
         String path = args[ARGS_PATH];
-        int line = 0;
-        try {
-            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path));
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            while (bufferedReader.readLine() != null) {
-                line++;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        switch (param) {
+            case "-l":
+                int line = getFileLine(path);
+                if (line == 0)
+                    System.out.println("该文件是空文件");
+                else
+                    System.out.println("行数：" + line);
+                break;
+            case "-s":
+                break;
         }
-        System.out.println("行数：" + line);
     }
-
 }
