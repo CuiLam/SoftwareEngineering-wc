@@ -124,4 +124,70 @@ public class FileUtil {
         }
         return count;
     }
+
+    /**
+     * 判断字符串是否是注释行
+     * @param line 字符串
+     * @return 如果是返回true
+     */
+    public static boolean isNoteLine(String line) {
+        String regex = "^\\W*$";
+        //如果包含这些表示可能是注释行
+        //包含并且注释符号前全为非字符的一定是注释行
+        if (line.contains("//")) {
+            return Pattern.matches(regex, line.split("//")[0]);
+        } else if (line.contains("/**")) {
+            return Pattern.matches(regex, line.split("//*/*")[0]);
+        } else if (line.contains("*/")) {
+            return Pattern.matches(regex, line.split("/*/")[0]);
+        } else if (line.contains("<!--")) {
+            return Pattern.matches(regex, line.split("//")[0]);
+        } else if (line.contains("--!>")) {
+            return Pattern.matches(regex, line.split("//")[0]);
+        } else if (line.contains("*")) {
+            return Pattern.matches(regex, line.split("/*")[0]);
+        }
+        return false;
+    }
+
+    /**
+     * 计算文件注释行行数
+     * @param path 文件路径
+     * @return 返回注释行行数
+     */
+    public static int getFileNoteLine(String path) {
+        int count = 0;
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path));
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null)
+                count += (isNoteLine(line) ? 1 : 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    /**
+     * 计算文件代码行行数
+     * @param path 文件路径
+     * @return 返回代码行行数
+     */
+    public static int getFileCodeLine(String path) {
+        int count = 0;
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path));
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                //当去除首位空白之后若长度大于1则当做代码行
+                String s = line.trim();
+                count += (s.length() > 1 ? 1 : 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
 }
