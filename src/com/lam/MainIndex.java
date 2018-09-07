@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+
 import static com.lam.util.FileUtil.getFileCharsCount;
 import static com.lam.util.FileUtil.getFileLine;
 import static com.lam.util.FileUtil.getFileStringCount;
@@ -17,12 +20,16 @@ import static com.lam.util.FileUtil.printFileMoreDate;
 
 public class MainIndex {
 
+    public static final String[] ALL_PARAMS = new String[]{"-l", "-w", "-c", "-a"};
+
     public static void main(String[] args) {
         MainIndex main = new MainIndex();
         //处理参数
         List<String> params = new ArrayList<>();
         for (String s : args) {
-            if (s.startsWith("-")) {
+            if (s.equals("-x")) {
+              main.showGui();
+            } else if(s.startsWith("-")) {
                 params.add(s);
             } else if (isFile(s)) {
                 for (String param : params)
@@ -131,5 +138,24 @@ public class MainIndex {
                 printFileMoreDate(path);
                 break;
         }
+    }
+
+    private void showGui() {
+        JFileChooser jFileChooser = new JFileChooser();
+        jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        jFileChooser.showDialog(new JLabel(), "选择");
+        File file = jFileChooser.getSelectedFile();
+        if (file == null) {
+            System.out.println("没有选择文件或文件夹");
+            return;
+        }
+        if (file.isDirectory()) {
+            for (String p : ALL_PARAMS)
+                operFiles(file.getAbsolutePath(), p, null);
+        } else if (file.isFile()) {
+            for (String p : ALL_PARAMS)
+                operSingleFile(file.getAbsolutePath(), p);
+        }
+        System.out.println(jFileChooser.getSelectedFile().getName());
     }
 }
