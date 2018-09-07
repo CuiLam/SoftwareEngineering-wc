@@ -1,12 +1,33 @@
 package com.lam.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileUtil {
+
+    /**
+     * 判断某路径是否单个文件
+     * @param path 路径
+     * @return 如果是单个文件返回true
+     */
+    public static boolean isFile(String path) {
+        File file = new File(path);
+        return file.isFile();
+    }
+
+    /**
+     * 判断某路径是否是文件夹
+     * @param path 路径
+     * @return 如果是文件夹返回true
+     */
+    public static boolean isDirectory(String path) {
+        File file = new File(path);
+        return file.isDirectory();
+    }
 
     /**
      * 读取文件行数
@@ -34,9 +55,9 @@ public class FileUtil {
     public static int getStringCount(String string) {
         int count = 0;
         String s = string.trim();   //首先去除字符串收尾缩进
-        String pattern = "[a-zA-Z0-9]+\\b";
-        Pattern p = Pattern.compile(pattern);
-        Matcher matcher = p.matcher(s);
+        String regex = "[a-zA-Z0-9]+\\b";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(s);
         while (matcher.find()) {
 //            System.out.println(matcher.group(0));
             count++;
@@ -76,6 +97,28 @@ public class FileUtil {
             String line;
             while ((line = bufferedReader.readLine()) != null)
                 count += line.length();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    /**
+     * 计算文件空行行数
+     * @param path 文件路径
+     * @return 返回空行行数
+     */
+    public static int getFileEmptyLine(String path) {
+        int count = 0;
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path));
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                //当去除首位空白之后若长度小于等于1则当做空行
+                String s = line.trim();
+                count += (s.length() <= 1 ? 1 : 0);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
