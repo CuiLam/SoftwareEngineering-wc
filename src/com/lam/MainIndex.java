@@ -48,15 +48,6 @@ public class MainIndex {
                 //s可能是通配符
                 String currentPath = main.getCurrentPath();
                     main.operFiles(currentPath, params, getRegex(s));
-//                String[] paths = new File(currentPath).list();
-//                if (paths == null) {
-//                    System.out.println("当前目录文件夹为空！");
-//                    return;
-//                }
-//                for (String p : paths) {
-//
-//                }
-//                System.out.println("参数有误！");
                 return;
             }
         }
@@ -69,9 +60,7 @@ public class MainIndex {
             if (i != 0 && !strings1[i].equals(""))
                 stringBuilder.append("\\S*");
             stringBuilder.append(strings1[i]);
-//            System.out.println("--" + strings1[i] + "--");
         }
-//        System.out.println(stringBuilder);
         String[] strings2 = stringBuilder.toString().split("\\?");
         stringBuilder = new StringBuilder();
         for (int i = 0; i < strings2.length; ++i) {
@@ -79,7 +68,6 @@ public class MainIndex {
                 stringBuilder.append("\\S");
             stringBuilder.append(strings2[i]);
         }
-//        System.out.println(stringBuilder);
         return stringBuilder.toString();
     }
 
@@ -163,6 +151,5 @@ public class MainIndex {
             for (String p : ALL_PARAMS)
                 operSingleFile(file.getAbsolutePath(), p);
         }
-//        System.out.println(jFileChooser.getSelectedFile().getName());
     }
 }
