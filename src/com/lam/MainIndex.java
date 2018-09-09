@@ -20,7 +20,14 @@ import static com.lam.util.FileUtil.printFileMoreDate;
 
 public class MainIndex {
 
-    public static final String[] ALL_PARAMS = new String[]{"-l", "-w", "-c", "-a"};
+    public static final List<String> ALL_PARAMS = new ArrayList<>();
+
+    {
+        ALL_PARAMS.add("-l");
+        ALL_PARAMS.add("-w");
+        ALL_PARAMS.add("-c");
+        ALL_PARAMS.add("-a");
+    }
 
     public static void main(String[] args) {
         MainIndex main = new MainIndex();
@@ -32,16 +39,15 @@ public class MainIndex {
             } else if(s.startsWith("-")) {
                 params.add(s);
             } else if (isFile(s)) {
+                System.out.println(s);
                 for (String param : params)
                     main.operSingleFile(s, param);
             } else if (isDirectory(s)) {
-                for (String param : params)
-                    main.operFiles(s, param, null);
+                    main.operFiles(s, params, null);
             } else {
                 //s可能是通配符
                 String currentPath = main.getCurrentPath();
-                for (String param : params)
-                    main.operFiles(currentPath, param, getRegex(s));
+                    main.operFiles(currentPath, params, getRegex(s));
 //                String[] paths = new File(currentPath).list();
 //                if (paths == null) {
 //                    System.out.println("当前目录文件夹为空！");
@@ -89,7 +95,7 @@ public class MainIndex {
         return line;
     }
 
-    private void operFiles(String path, String param, String regex) {
+    private void operFiles(String path, List<String> params, String regex) {
         String[] files = new File(path).list();
         if (files == null) {
             System.out.println("文件夹为空");
@@ -98,11 +104,13 @@ public class MainIndex {
         for (String p : files) {
             String truePath = path + "/" + p;
             if (isDirectory(truePath)) {
-                operFiles(truePath, param, regex);
+                operFiles(truePath, params, regex);
             } else if (isFile(truePath)) {
                 if (regex != null && !Pattern.matches(regex, p))
                     continue;
-                operSingleFile(truePath, param);
+                System.out.println(truePath);
+                for (String param : params)
+                    operSingleFile(truePath, param);
             } else {
                 System.out.println("路径有误!");
             }
@@ -111,7 +119,6 @@ public class MainIndex {
 
     private void operSingleFile(String path, String param) {
         int count;
-        System.out.println(path);
         switch (param) {
             case "-l":  //行数
                 count = getFileLine(path);
@@ -150,12 +157,12 @@ public class MainIndex {
             return;
         }
         if (file.isDirectory()) {
-            for (String p : ALL_PARAMS)
-                operFiles(file.getAbsolutePath(), p, null);
+                operFiles(file.getAbsolutePath(), ALL_PARAMS, null);
         } else if (file.isFile()) {
+            System.out.println(file.getAbsolutePath());
             for (String p : ALL_PARAMS)
                 operSingleFile(file.getAbsolutePath(), p);
         }
-        System.out.println(jFileChooser.getSelectedFile().getName());
+//        System.out.println(jFileChooser.getSelectedFile().getName());
     }
 }
