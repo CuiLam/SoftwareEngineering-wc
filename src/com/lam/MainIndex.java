@@ -20,7 +20,7 @@ import static com.lam.util.FileUtil.printFileMoreDate;
 
 public class MainIndex {
 
-    public static final List<String> ALL_PARAMS = new ArrayList<>();
+    private static final List<String> ALL_PARAMS = new ArrayList<>();
 
     {
         ALL_PARAMS.add("-l");

@@ -16,8 +16,7 @@ public class FileUtil {
      * @return 如果是单个文件返回true
      */
     public static boolean isFile(String path) {
-        File file = new File(path);
-        return file.isFile();
+        return path != null && new File(path).isFile();
     }
 
     /**
@@ -27,8 +26,7 @@ public class FileUtil {
      * @return 如果是文件夹返回true
      */
     public static boolean isDirectory(String path) {
-        File file = new File(path);
-        return file.isDirectory();
+        return path != null && new File(path).isDirectory();
     }
 
     /**
@@ -45,19 +43,22 @@ public class FileUtil {
             while (bufferedReader.readLine() != null)
                 line++;
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            return 0;
         }
         return line;
     }
 
     /**
-     * 计算字符串中单词个数
+     * 计算字符串中单词和数字个数
      *
      * @param string 原字符串
      * @return 返回单词个数
      */
     public static int getStringCount(String string) {
         int count = 0;
+        if (string == null)
+            return 0;
         String s = string.trim();   //首先去除字符串收尾缩进
         String regex = "[a-zA-Z0-9]+\\b";
         Pattern pattern = Pattern.compile(regex);
@@ -84,7 +85,8 @@ public class FileUtil {
             while ((line = bufferedReader.readLine()) != null)
                 count += getStringCount(line);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            return 0;
         }
         return count;
     }
@@ -104,7 +106,8 @@ public class FileUtil {
             while ((line = bufferedReader.readLine()) != null)
                 count += line.length();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            return 0;
         }
         return count;
     }
@@ -127,7 +130,8 @@ public class FileUtil {
                 count += (s.length() <= 1 ? 1 : 0);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            return 0;
         }
         return count;
     }
@@ -139,6 +143,8 @@ public class FileUtil {
      * @return 如果是返回true
      */
     public static boolean isNoteLine(String line) {
+        if (line == null)
+            return false;
         String regex = "^\\W*$";
         //如果包含这些表示可能是注释行
         //包含并且注释符号前全为非字符的一定是注释行
@@ -173,7 +179,8 @@ public class FileUtil {
             while ((line = bufferedReader.readLine()) != null)
                 count += (isNoteLine(line) ? 1 : 0);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            return 0;
         }
         return count;
     }
@@ -196,7 +203,8 @@ public class FileUtil {
                 count += (s.length() > 1 && !isNoteLine(s) ? 1 : 0);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            return 0;
         }
         return count;
     }
@@ -222,7 +230,9 @@ public class FileUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("文件名有误！");
+            return;
+//            e.printStackTrace();
         }
         if (emptyLine + noteLine + codeLine == 0) {
             System.out.println("该文件是空文件");
